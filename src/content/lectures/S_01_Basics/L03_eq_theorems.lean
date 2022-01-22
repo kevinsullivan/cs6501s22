@@ -1,5 +1,3 @@
-import .lecture_2
-
 /-
 From the axioms of reflexivity and substitutabilty
 we now prove two *theorems*. A theorem is a proven

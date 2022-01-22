@@ -6,5 +6,6 @@ Good to go!
 -/
 import algebra.add_torsor
 /-
-Otherwise you may judge that there has been a malfunction.
+Otherwise, we've malfunctioned.
+Ask for help.
 -/
