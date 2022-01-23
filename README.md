@@ -5,7 +5,7 @@ Welcome to UVa CS6501-001, Spring 2022, taught by Kevin Sullivan. We're going to
 ## .,,.. the Yellow Brick Road
 
 - Update your operating system:
-  - If MacOS: Be sure your OS is up-to-date (current version of Big Sur, 11.5.2 as of this writing).
+  - If MacOS: Be sure your OS is up-to-date (current version of Monterey, 12.0.1 as of this writing).
   - If Windows:
     - If you already have Windows Pro, Education, or Enterprise, skip the remaining steps, else continue.
     - Windows 10 Home won't do: You must update to Windows 10 Professional, Enterprises, or Education
