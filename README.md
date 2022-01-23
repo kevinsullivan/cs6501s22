@@ -24,7 +24,7 @@ Welcome to UVa CS6501-001, Spring 2022, taught by Kevin Sullivan. We're going to
     - Enter the following command in the window: xcode-select --install
     - When it asks, go ahead with the standard install process. 
 - Have a GitHub account. Create one for yourself if necessary. It's free: <https://github.com/>
-- Install Docker Desktop: <https://www.docker.com/products/docker-desktop>. It's free. If you already have it, update it to the current version.
+- Install Docker Desktop: <https://www.docker.com/products/docker-desktop>. It's free. If you already have it, update it to the current version. Repeat: Update it to the most recent version.
 - Install VSCode: <https://code.visualstudio.com/download>. It's free.
 - Launch Docker Desktop and watch for it to complete its start-up procedures. While it starts up, continue to the remaining instructions that follow here.
 - Use GitHub to fork this repository now. How? Here:
