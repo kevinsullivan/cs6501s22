@@ -9,23 +9,27 @@ we assume that a proposition is true, we do
 so by assuming that there is a proof of it.  
 
 In classical logic, an "inference rule" is a 
-procedure for deriving the truth of one 
+procedure for deriving the *truth* of one 
 proposition from the truths of others. As an
 example, if we've assumed that the propositions,
 x = y and y = z, are true, then we can apply the
-inference rule that expresses that equality is a
-transitive relation to derive the truth of x = z.
-The rule would say, x = y → y = z → x = z.
+inference rule (actually a theorem, in this case, 
+rather than axiom) that expresses that equality is 
+a transitive relation to deduce the truth of x = z.
+The "rule" basicall states, x = y → y = z → x = z.
 
-But in our "software" logic, and inference 
+But in our "software" logic, an inference 
 rule is not just a reasoning principle for
 deriving new truths from old truths, it is 
 a program for deriving new proofs from old
-proofs (and perhaps other values). So now 
-dry paper & pencil logic literally becomes
-literally an exercise in "programming" not
-only with data types and values but logical 
-types (propositions) and values (proofs).
+proofs (and perhaps other values). 
+
+So old paper & pencil logic now becomes an
+exercise in "programming." But it's of a kind 
+that you have not likely seen before, for now
+we will be programming not only with data tyoes
+and values with with propositions (logical types)
+and proofs (values of these logical types).
 -/
 
 /-
@@ -98,9 +102,9 @@ unlike our axioms, these generalize to any "universe level."
 #check @eq.refl
 #check @eq.subst
 
--- Example: a proof of 1 = 1
-#check eq.refl 1       -- remember that ℕ is inferred
-#check @eq.refl nat 1  -- to state it explicitly, use @
+-- Example using eq.refl: (terms encoding) proof of 2 = 2
+#check eq.refl 2       -- remember that ℕ is inferred
+#check @eq.refl nat 2  -- to state it explicitly, use @
 
 /-
 Example using eq.subst.
