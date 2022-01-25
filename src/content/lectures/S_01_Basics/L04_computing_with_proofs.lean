@@ -145,7 +145,7 @@ For =
 
 /-
 For ∀ x, P x
-  - introduction rule: assume arbitrary x, then show P x
+  - introduction rule: assume arbitrary but specific x, then show P x
   - elimination rule: next time!
 -/
 
