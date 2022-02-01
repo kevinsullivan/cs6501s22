@@ -30,7 +30,51 @@ conjecture in the formal language of predicate
 logic. We'll use an implementation of a specific
 version of predicate logic provided by the Lean
 Prover.
+-/
 
+universe u
+def eq_symm : ∀ (α : Sort u) (x y : α), x = y → y = x := 
+_ 
+/-
+λ α x y h_eq, 
+  let pf := _ in _ ... ???
+_
+-/
+#check @eq.subst
+/-
+∀ {α : Sort u_1} {P : α → Prop} {a b : α}, a = b → P a → P b
+-/
+
+def eq_symm' : ∀ (α : Sort u) (x y : α), x = y → y = x := 
+begin
+  intros α x y h_eq,
+  rw <-h_eq,
+end
+
+axioms (foo bar : ℕ) (h : foo = bar)
+
+def xyz : bar = foo := eq_symm' nat foo bar h
+#check xyz
+
+def eq_trans : 
+  ∀ (a b c : Sort u), a = b → b = c → a = c := 
+begin 
+  assume a b c h_ab h_bc,
+  rw <- h_ab at h_bc,
+  --exact h_bc,
+  --apply h_bc,
+  assumption
+end
+
+example : 
+  ∀ (a b c : Sort u), a = b → b = c → a = c := 
+begin 
+  assume a b c h_ab h_bc,
+  rw h_ab,
+  assumption,
+end
+
+/-
 Second, you must understand how to construct 
 proofs of such propositions, if proofs actually
 exist, which they might or might not for given

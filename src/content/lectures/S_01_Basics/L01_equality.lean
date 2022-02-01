@@ -45,6 +45,8 @@ follow example shows formally (in Lean).
 -/
 
 example : 1 = 1 := eq.refl 1   -- T = ℕ 
+--  id    type     value
+--  id    propo    proof
 
 /-
 Yay! We just constructed a formal proof: a
@@ -229,3 +231,7 @@ example : 2 = 2 := rfl          -- this varient infors both arguments
 
 #check @rfl     -- same as eq.refl but with both arguments implicit
 #check @eq.refl --
+
+def foobar : 1 = 1 := rfl
+
+#reduce foobar
