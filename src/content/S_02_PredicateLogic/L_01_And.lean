@@ -668,4 +668,78 @@ Now we can see that the elimination rules work
 as one should expect.
 -/
 #check iff.elim_left h
+#check iff.mp h   -- weird names but whatever
+
 #check iff.elim_right h
+#check iff.mpr h  -- weird names but whatever
+
+/-
+Similarly, if we have proofs of P → Q and of
+Q → P, then we can compose them into a proof
+of P ↔ Q using iff.intro.
+-/
+
+axioms (pq : P → Q) (qp : Q → P)
+#check iff.intro pq qp
+
+/-
+Can you guess how iff is defined in Lean's libraries?
+-/
+
+#print iff
+
+/-
+`iff P Q`, with notation `P ↔ Q`, is the proposition 
+asserting that `P` and `Q` are equivalent, that is, 
+that they have the same truth value.
+
+structure iff (a b : Prop) : Prop :=
+intro :: (mp : a → b) (mpr : b → a)
+-/
+
+/-
+Example: ∧ is associative
+-/
+
+example : ∀ ( P Q R : Prop), P ∧ Q ∧ R ↔ (P ∧ Q) ∧ R :=
+begin
+  intros P Q R,
+  split,    -- does apply iff.intro _ _
+
+  -- forward
+  sorry,   -- skip proof, fill in later
+
+  -- reverse 
+  sorry,   -- skip proof, fill in later
+end
+
+/-
+Example: P ∧ (P ↔ Q) → Q
+-/
+
+example : P ∧ (P ↔ Q) → Q :=
+begin
+  assume h,
+  cases h,
+  cases h_right,
+  exact h_right_mp h_left,
+end
+
+/-
+The cases tactic does case analysis
+on a value in the context, here h.
+For each possible way in which h
+could have been constructed, you'll
+need to show that you can satisfy 
+the goal. In each case, Lean will 
+also provide values of the arguments
+that that case's constructor would
+have to have been given in that case.
+
+Here there is just one constructor,
+and.intro, with two arguments, a proof
+of P and a proof of P ↔ Q. So in the
+case being analyzed, we can assume
+we have such values. The rest is 
+straightforward.
+-/
