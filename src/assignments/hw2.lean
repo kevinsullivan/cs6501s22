@@ -1,8 +1,15 @@
 /-
-The purpose of this assignment is to develop
-and deepen your understanding of the concepts
-we've covered so far: equality of values/terms 
-of any type, and conjunction of propositions.
+The purpose of this lecture/assignment is to
+develop and deepen your understanding of the 
+lofical concepts covered so far: equality of 
+values/terms of any type, and conjunction of
+propositions. We present the embedding of the
+∨ connective of predicate logic into Lean and
+elaborate on the representation of relations,
+such as equality, as inductive families of
+propositions along with proof-building and 
+proof-consuming inference rules for them, in
+Lean.
 -/
 
 /-
@@ -137,7 +144,9 @@ leave out the proposition to be proved and
 where Lean can't infer it.
 -/
 
-lemma ex1 := or.inl (eq.refl 3)
+
+-- can't infer second disjunct (return type)
+lemma ex1 := or.inl (eq.refl 3) 
 
 /-
 Here, the term, or.inl (eq.refl 3), is a
