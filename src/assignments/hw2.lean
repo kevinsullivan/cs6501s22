@@ -436,11 +436,11 @@ example : F 2 2 :=
 example : F 1 1 := 
   F.intro 1 1 (begin intro h, cases h end) rfl
 
--- (1,2) is not in: the check that m=n fails
+-- (1,2) is not in the relation: the check that m=n fails
 example : F 1 2 := 
   F.intro 1 2 (begin intro h, cases h end) rfl
 
--- (0,0) is not in: the check that n≠0 fails
+-- (0,0) is not in the relation: the check that n≠0 fails
 example : F 0 0 := 
   F.intro 0 0 (begin intro h, cases h end) rfl
 
