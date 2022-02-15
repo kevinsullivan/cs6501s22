@@ -87,19 +87,46 @@ end
 ∀ (p : Prop), p ∨ ¬p
 -/
 
-example : ∀ (P : Prop), ¬ ¬ P → P :=
+example : ∀ (P : Prop), ¬¬ P → P :=
 begin
   intro P,
   assume h,
-  -- stuck! this is not a theorem in
-  -- the constructive logic of Lean
-  -- or Coq, or ...
+  /-
+  At this point we're stuck! All we
+  have to work with is our assumed
+  proof of ¬¬P, but all that tells 
+  us is that *if* we have a proof 
+  of ¬P we can derive a proof of 
+  false (which which we could deduce
+  P); but we have no proof of ¬P to
+  use. The bottom line is that ¬¬P→ P
+  is *not* valid in the constructive
+  logic of Lean. On the other hand, as
+  we now show, if we accept the law of
+  the excluded middle, we can finish
+  the proof. The steps are (1)use em
+  to derive a proof of P ∨ ¬P, then
+  (2) show that in either case, P is
+  true, in the first case by assumption
+  and in the second case by contradiction.
+  -/
   have o := classical.em P,
   cases o,
-  assumption,
-  contradiction,
+  assumption,     -- case #1: P is true  
+  contradiction,  -- case #2: ¬P is true
   /-
-  have f := h o,
+  If you're not sure what "contradiction 
+  is doing here, comment it out and then
+  uncomment the following two lines, which
+  make clear that from a contradiciton we
+  can derive a proof of false, and then we
+  can use false elimination (case analysis
+  where to prove the conclusion follows in
+  all cases requires no proofs at all as 
+  there are no possible cases for a proof
+  of false to consider)."
+  
+  have f := h o,    -- <<< understand this!
   cases f,
   -/
 end
@@ -107,33 +134,35 @@ end
 /-
 If we assume the law of the excluded middle,
 then negation elimination, ¬¬P → P, is valid.
--/
 
-/-
-That ¬¬P → P is the essence of proof by 
-contradiction. Let's start by noting that
-we now have two different proof techniques
-involving contradictions.
+That ¬¬P → P is valid is the essence of proof
+by contradiction. 
+
+Let's start by noting that we have now seen
+two different proof techniques involving
+contradictions.
 
 In "proof by negation," we prove ¬P by 
-assuming P and showing that that leads
-to a contradiction (essentially a proof
-of false). That is, to prove ¬P we prove
-P → false.
+proving P → false, assuming P and showing
+that from that assumption we can derive 
+a proof false. That is, to prove ¬P we 
+prove P → false.
 
 By contrast, proof by contradiction seeks
-to prove P by assuming ¬P and showing that
-that leads to a contradiction. That is, we
-seek to show ¬P → false, which is just what
-we mean by ¬¬P. *THEN*, having showing ¬¬P,
-we apply (classical) negation elimination
-to deduce P. 
+to prove P (rather than ¬ P) by assuming 
+¬P and showing that *that* assumption leads 
+to a contradiction. That is, we seek to 
+show ¬P → false, which is just what we mean 
+by ¬¬P. *THEN*, having shown ¬¬P, we apply 
+(classical) negation elimination (¬¬P → P)
+to derive a proof of P, our overall goal. 
 
 What we've seen today, then, is that while
 proof by negation is "constructively valid"
 proof by contradiction is *not*. However it
-is valid if we assume the classically axiom 
-of the excluded middle. That's precisely 
-what allows us to infer P from ¬¬P, as we
-have just seen.
+is valid if we assume the classical axiom 
+of the excluded middle. That axiom is what 
+allows us to infer P from ¬¬P, which is the
+last step in a proof by contradiction, as
+we have just seen.
 -/
