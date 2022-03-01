@@ -83,5 +83,14 @@ Try slightly changing the definition of "and" or
 changes break the proof(s).
 -/
 
+#reduce and tt ff
+
+notation b1 * b2 := and b1 b2
+notation b1 + b2 := or b1 b2
+prefix ! := not
+
+#reduce boo.tt * boo.ff
+#reduce boo.tt + boo.ff
+#reduce !(boo.tt + boo.ff)
 
 end hidden
