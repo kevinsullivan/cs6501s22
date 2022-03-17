@@ -87,8 +87,8 @@ How do we know that eval terminates?
 
 -- Non-terminating functions would be fatal
 def bad : ℕ → false
-| n := bad n
-#check (bad 3)  -- Yikes a proof of false!
+| n := bad n    -- non-terminating recursion
+#check (bad 3)  -- Yikes, a proof of false!
 
 -- PROPERTIES?
 
@@ -99,12 +99,17 @@ evaluates_to_true.
 -/
 def evaluates_to_true : bool_lang → Prop 
 | e := eval e = boo.tt
+/-
+This definition broke when we added an interpretation,
+i, as a second argument to eval.
+-/
 
 example : evaluates_to_true TT :=
 begin
   unfold evaluates_to_true,
   trivial,
 end
+--ditto last comment
 
 example : evaluates_to_true (TT * FF) :=
 begin
@@ -112,6 +117,7 @@ begin
   simp [eval],
   apply rfl,  -- false
 end
+--ditto last comment
 
 -- Property of an individual expression
 example : evaluates_to_true (TT * TT) :=
@@ -120,13 +126,32 @@ begin
   simp [eval],
   apply rfl,  -- false
 end
+--ditto last comment
+
 
 -- Property of the language as a whole: 
 -- evaluation is deterministic.
 
 -- HOMEWORK
 
-def eval_is_deterministic : _ := _
+/-
+What deterministic means is that if you evaluate the same
+expression twice (in the same environment) that you'll get
+the same answer. A language with a statement that returns 
+a truly random number wouldn't have this property. Show that
+evaluation is deterministic for our "Bool" language.
+-/
+
+def eval_is_deterministic : 
+  ∀ (e : bool_lang) (i : bool_var → boo) (b1 b2 : boo), 
+  b1 = (eval e i) → 
+  b2 = (eval e i) → 
+  b1 = b2 := 
+begin
+  intros e i b1 b2 h1 h2,
+  rw h1,
+  rw h2,
+end
 
 
 end hidden
