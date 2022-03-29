@@ -1,10 +1,10 @@
-namespace bool_lang
+import .bool_var 
 
-inductive bool_var 
-| V (n : ℕ)
+namespace bool_lang
 
 open bool_var
 
+-- DATA TYPE
 inductive bool_expr : Type
 | TT : bool_expr
 | FF : bool_expr
