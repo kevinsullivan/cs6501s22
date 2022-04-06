@@ -236,6 +236,30 @@ machines. Here we've applied map_reduce to (1) a
 reduction operator, (2) it's identity, and (3) an
 element mapping function to produce a function that
 counts the number of odd values in a list of nats.
-
-Yay!
+map_reduce nat.add 0 (λ n, n%2)
 -/
+
+
+/-
+Practice: use map_reduce to convert a list of
+interpretations for an expression, e, 
+-/
+
+/-
+Practice: Identify the places in the SAT solver
+code that I/Kevin will provide where special cases
+of map or reduce functions are used and replace 
+them with uses of the higher-order list map and
+reduce functions while maintaining correctness 
+of the code.
+
+The versions in the Lean library are called
+list.map and list.foldr (for "fold right"). You 
+may, and should, use Lean's versions for this
+assignment.
+-/
+
+#check @list.map
+#check @list.foldr
+
+-- Yay!
