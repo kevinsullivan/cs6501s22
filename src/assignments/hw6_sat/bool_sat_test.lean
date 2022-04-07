@@ -14,34 +14,26 @@ def Z := (bool_var.V 2)
 
 open bool_expr
 
-def e1 := bool_expr.TT
-def e1' := bool_expr.FF
-def e2 := bool_expr.var X
-def e3 := bool_expr.var Y
+def e1 := TT
+def e1' := FF
+def e2 := var X
+def e3 := var Y
 def e4 := bool_expr.conj e2 e3
 
-#reduce get_var_set e1
-#reduce size (get_var_set e1)
-#reduce interps_of_vars (get_var_set e1)
+/-
+What list of interps should arise from a 
+set of zero variables? It can't be the
+empty list of interpretations bcause we
+need at least one interpretation under
+which to evaluate an expression, e, even
+if it's one without any use of variables.
+-/
 
-#reduce interps_of_vars_helper 0
-#reduce interps_of_vars_helper 1
-
-
-#reduce size (interps_of_vars (get_var_set e1))
 #eval is_satisfiable e1
 #eval is_satisfiable e1'
-
-#reduce get_var_set e2
-#reduce size (get_var_set e2)
-#reduce interps_of_vars (get_var_set e2)
-#reduce get_interp_values e2 (interps_of_vars (get_var_set e2))
 #eval is_satisfiable e2
-
-
-#reduce get_var_set e4
-#reduce interps_of_vars (get_var_set e4)
-#eval is_satisfiable e4
+#eval is_satisfiable (conj e2 (not e2))
+#eval is_satisfiable (disj e2 (not e2))
 
 
 end bool_lang
