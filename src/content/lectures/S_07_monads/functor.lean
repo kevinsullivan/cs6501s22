@@ -46,7 +46,7 @@ at their types:
 
 def list_map    {α : Type u} {β : Type v} : (α → β) →   (list α)    → (list β)
 def option_map  {α : Type u} {β : Type v} : (α → β) →   (option α)  → (option β)
-def tree_map    {α : Type u} {β : Type v} : (α → β) →   (tree α)     → (tree β)
+def tree_map    {α : Type u} {β : Type v} : (α → β) →   (tree α)    → (tree β)
 
 These types are identical but in one dimension:          ^^^^^          ^^^^^
 
@@ -66,7 +66,7 @@ a concrete type (such as bool or nat), but a polymorphic type builder, i.e.,
 a value such as list α, option α, or tree α (each of type, Type → Type)
 -/
 
-class functor (m : Type u → Type v) : Type (max (u+1) v) :=
+class functor (m : Type u → Type v) :=
 (map : ∀ {α β : Type u}, (α → β) → m α → m β)
 
 /-
@@ -97,6 +97,8 @@ destination type.
 
 #reduce nat.succ <$> [] 
 #reduce nat.succ <$> [1,2,3]
+
+#reduce string.length <$> ["Hello", "Lean!!!"]
 
 #reduce nat.succ <$> option.none
 #reduce nat.succ <$> option.some 0
