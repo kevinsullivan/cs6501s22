@@ -1,6 +1,23 @@
-namespace hidden
-
 universes u v
+
+/-
+We define a simple "binary tree of α values" data type
+for use later in this file. Tuck it away in memory for now. 
+-/
+
+inductive tree (α : Type u)
+| empty : tree
+| node (a : α) (left right : tree) : tree
+
+
+
+def aTree :=
+  tree.node 0 
+  (tree.node 1 tree.empty tree.empty) 
+  (tree.node 2 tree.empty tree.empty)
+
+
+namespace hidden
 
 /-
 We've seen a function for mapping a (different) function over a list.
@@ -22,17 +39,12 @@ def option_map {α : Type u} {β : Type v} : (α → β) → option α → optio
 | f (some a)  := some (f a) 
 
 /-
-As a third example, suppose we have a binary tree type with nodes that
-contain values of any type, α.
+As a third example, consider mapping over trees.
 -/
 
-inductive tree (α : Type u)
-| empty : tree
-| node (a : α) (left right : tree) : tree
-
 /-
-Now we can write a function for mapping trees of α values to trees
-of β values in an analogous manner.
+We can also write a function for mapping trees of α 
+values to trees of β values in an analogous manner.
 -/
 
 def tree_map {α : Type u} {β : Type v} : (α → β) → (tree α) → (tree β)
@@ -41,21 +53,20 @@ def tree_map {α : Type u} {β : Type v} : (α → β) → (tree α) → (tree �
 
 
 /-
-The implementations of these functions differ significantly; but look
-at their types:
+What we're seeing are different implementations of "the same idea"
+for mapping an element-level mapping function over a various types
+of data structures containing such elements. The implementations of
+these functions differ significantly; but look at their types. What
+we see is that they're identical but for the types of containers we
+envision transforming by the application  of element-level functions
+to their contents.
 
 def list_map    {α : Type u} {β : Type v} : (α → β) →   (list α)    → (list β)
 def option_map  {α : Type u} {β : Type v} : (α → β) →   (option α)  → (option β)
 def tree_map    {α : Type u} {β : Type v} : (α → β) →   (tree α)    → (tree β)
 
-These types are identical but in one dimension:          ^^^^^          ^^^^^
-
-As usual, we can try to abstract to a new parameter. 
-
-
-
-But what is its type?
-Well, question: What is the type of list? Of option? Of tree? 
+As usual, we can generalize by introducing a new parameter. 
+But what is its type? Well, question: What is the type of list? Of option? Of tree? 
 Answer: Each is Type u → Type u
 We can't just add a parameter, m : Type u → Type u: the *implementations* differ
 We have a common abstraction but with different implementations for different types
@@ -103,11 +114,6 @@ destination type.
 #reduce nat.succ <$> option.none
 #reduce nat.succ <$> option.some 0
 
-def aTree :=
-  tree.node 0 
-  (tree.node 1 tree.empty tree.empty) 
-  (tree.node 2 tree.empty tree.empty)
-
 #reduce nat.succ <$> (tree.empty)
 #reduce nat.succ <$> aTree
 
@@ -151,7 +157,6 @@ def const (β : Sort u₂) (a : α) : β → α := λ x, a
 
 instance : functor list := ⟨ @list.map, _ ⟩
 
-universes u v 
 def list_map_const 
   {α β : Type u} :
     α → list β → list α 
@@ -177,3 +182,83 @@ instance : functor option := ⟨ @option.map, @option_map_const ⟩
 #reduce nat.succ <$> [1,2,3]
 #reduce ff <$ [1,2,3]
 #reduce [1,2,3] $> ff
+
+
+/-
+One of the ways in which we can use the functor typeclass
+is in defining generic versions of concrete functions. For
+example, consider the simple increment function on natural
+numbers. 
+-/
+
+def inc := 
+  λ (n : nat), 
+    n + 1
+
+/-
+We've seen how we can map such functions over lists of 
+natural numbers. And, with this capability, we can define
+a new function, here called inc_list_nat, that maps the
+inc function over lists of nats. We can say that we have
+lifted the inc function to be applicable to lists of nats.
+-/
+
+def inc_list_nat := 
+  λ l : (list nat), 
+    list.map 
+      inc 
+      l
+
+/-
+Challenge: Generalize from this idea to write a generic
+(ad hoc polymorphic) function, inc', that lifts inc 
+to be be applicable to objects of any "functorial" type
+over int. Given what we've got so far, for example, you  
+should be able to apply inc_m_nat not only to objects of
+type list nat, but also option nat, tree nat, and so on,
+for any type constructor parameterized by the type, nat.
+-/
+
+def inc' {f : Type → Type} [functor f ] (i : f nat) : f nat := 
+  functor.map inc i
+
+-- a generic increment operation on functorial data structures containing nats
+example : inc' [1,2,3] = [2,3,4] := rfl 
+example : inc' (some 1) = some 2 := rfl
+instance : functor tree := ⟨ @hidden.tree_map, _ ⟩  -- you can fill in second field
+example : inc' aTree =
+            tree.node 
+              1 
+              (tree.node 2 tree.empty tree.empty) 
+              (tree.node 3 tree.empty tree.empty) := rfl
+
+/-
+Generalize this function, from mapping *inc* over any functorial context
+(data structure!) over values of type nat, to mapping *any function* of 
+type α → β over any functorial context/container over values of type, α.
+-/
+
+def map_f {α β : Type u} {f : Type u → Type v} [functor f] : (α → β) → f α → f β  
+| h i :=  functor.map h i
+
+
+/-
+Examples:
+-/
+
+def l_str := ["Hello", " Lean!"]
+def o_str := some "Hello"
+def t_str := tree.node "Hello" (tree.node " There!" tree.empty tree.empty) tree.empty
+
+#reduce map_f string.length l_str
+#reduce map_f string.length o_str
+#reduce map_f string.length t_str
+
+/-
+Finally, let's look at the type of map_f to get a set of its nature.
+In particular, look at this: (α → β) → f α → f β. What we've done is
+to lift a "pure" function, h : α → β to one that takes a "functorial"
+object, i : f α, and returns a functorial object of type f β. And by
+the magic of typeclass resolution, we've overloaded this function for
+three functorial types, namely list, option, and tree.  
+-/
