@@ -79,6 +79,8 @@ a value such as list α, option α, or tree α (each of type, Type → Type)
 
 class functor (m : Type u → Type v) :=
 (map : ∀ {α β : Type u}, (α → β) → m α → m β)
+-- (law1 : _)    -- how mapping identify function works
+-- (law2 : _)    -- how mapping composition works
 
 /-
 As a shorthand notaton, we enable the developer to write
@@ -203,11 +205,7 @@ inc function over lists of nats. We can say that we have
 lifted the inc function to be applicable to lists of nats.
 -/
 
-def inc_list_nat := 
-  λ l : (list nat), 
-    list.map 
-      inc 
-      l
+def inc_list_nat ( l : list nat) := list.map inc l
 
 /-
 Challenge: Generalize from this idea to write a generic
@@ -219,7 +217,7 @@ type list nat, but also option nat, tree nat, and so on,
 for any type constructor parameterized by the type, nat.
 -/
 
-def inc' {f : Type → Type} [functor f ] (i : f nat) : f nat := 
+def inc' {f : Type → Type} [functor f] (i : f nat) : f nat := 
   functor.map inc i
 
 -- a generic increment operation on functorial data structures containing nats
