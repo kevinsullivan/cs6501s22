@@ -254,7 +254,7 @@ the rest of the pipeline.
 /-
 So what does a monad do? The answe: it gives us a
 more powerful version of >>, in the form of a generic
-function call bind, denoted >>=, that enables one to
+function call bind, denoted >=>, that enables one to
 add hidden processing of metadata to the evaluation
 of pipelines like the ones we've just seen. Monads 
 give us *function composition with effects*.
@@ -394,7 +394,8 @@ Now let's think about types:
 -/
 
 
-def compose_coat_breed :  (dogs → (breeds × ℕ)) → (breeds → (coats × ℕ)) → (dogs → (coats × ℕ))
+def compose_coat_breed : 
+  (dogs → (breeds × ℕ)) → (breeds → (coats × ℕ)) → (dogs → (coats × ℕ))
 | db bc := 
   λ (d : dogs), 
     let (b, c1) := db d in 
@@ -436,7 +437,8 @@ def compose_coat_breed' :
 Now let's simply generalize the pure argument and result types.
 -/
 
-def prof_compose {α β γ : Type} :  (α → (prof_result β)) → (β → (prof_result γ)) → (α → prof_result γ)
+def prof_compose {α β γ : Type} :  
+  (α → (prof_result β)) → (β → (prof_result γ)) → (α → prof_result γ)
 | f g := 
   λ (a : α), 
     let (b, c1) := f a in 
@@ -451,7 +453,8 @@ etc: a data structure that can contain values of type α. We've
 seen how to do this kind of generalization before.
 -/
 
-def m_compose' {α β γ : Type} (m : Type → Type):  (α → m β) → (β → m γ) → (α → m γ)
+def m_compose' 
+  {α β γ : Type} (m : Type → Type):  (α → m β) → (β → m γ) → (α → m γ)
 | f g := 
   λ (a : α), 
     let (b, c1) := f a in   -- we don't know that m is a pair!
