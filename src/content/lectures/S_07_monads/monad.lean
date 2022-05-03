@@ -65,6 +65,8 @@ value of (breed x), yielding a breed, and then applying the
 sheds function to that result of that first operation.
 -/
 
+namespace hidden
+
 inductive dogs | fido | polly
 inductive breeds | poodle | husky
 inductive coats | fur | hair
@@ -477,18 +479,32 @@ then treat b as an argument to the rest of the computation.
 /-
 That is, we need an overloaded definition of m_compose for 
 each "context-imposing" type, m. And central to this goal
-is an operation that takes an effectful result, unpacks its
-pure result value, and passes that on to the next effectful
-operation, itself taking a *pure* value and returning an
-effectful result. That is, we're going to need an operation
-like the one that follows here.
+is an operation that takes an effectful value, m α, and a
+function from α → m β. That is, we're going to need what 
+we call a overloaded bind operation, as follows.
 -/
 
 class has_bind' (m : Type → Type) :=
 (bind : ∀ {α β : Type}, m α → (α → m β) → m β)
 
+/-
+Here's the standard infix notation for bind.
+Note that it takes an α-monadic argument value
+and "feeds" it to a function that takes a pure 
+α value in and produces β-monadic value out. To
+obtain this result it will usually "reach into"
+the monadic value and behave subsequently based
+on what it finds. In many cases it will "apply" 
+its α → m β function to α values, if any, that
+it obtains from the monadic m α argument. 
+-/
+
 local infixl ` >>= `:55 := has_bind'.bind
 
+/-
+We now have enough machinery to cobble together
+a definition of bind for the prof_result monad.
+-/
 instance bind_prof_result : has_bind' (prof_result) := 
 ⟨ 
   λ {α β : Type } (ma : prof_result α) a2mb, 
@@ -508,9 +524,67 @@ def m_comp'
 
 #reduce m_comp' m_breed m_coat
 
-local infixl ` >=> `:55 := m_comp'
+local infixl ` >=> `:60 := m_comp'
 
 def is_messy_prof := (m_breed >=> m_coat >=> m_sheds)
 
 #reduce is_messy_prof fido
 #reduce is_messy_prof polly
+
+/-
+So the fish operator supports the feeding of 
+a monadic value into a composition of monadic
+functions. What is doesn't support is feeding 
+of a pure value into such a pipeline, as the 
+following example shows.
+-/
+
+
+/-
+The problem is that polly is pure but >=> expects
+a monadic value. The solution is to define a new
+function, one that will have to be overloaded for
+each monadic type) that takes a pure value as its
+argument "lifts" it to a monadic value. Then we 
+can use >=> to feed it into a pipeline composed
+of monadic functions.
+-/
+
+class has_return' (m : Type → Type) :=
+(return' : ∀ {α : Type}, α → m α)
+
+open has_return'
+
+instance : has_return' (prof_result) := 
+⟨
+  λ α a, (a, 0)
+⟩  
+
+/-
+Now we can write a complete pipeline with
+input fed in "from the left."
+-/
+
+#reduce (return' polly) >>= (m_breed >=> m_coat >=> m_sheds)
+
+/-
+-/
+
+
+instance bind_option : has_bind' (option) :=
+⟨ 
+  λ {α β : Type } (ma : option α) a2mb, 
+    match ma with
+    | none := none
+    | (some a) := a2mb a
+    end
+⟩
+
+instance : has_return' (option) := 
+⟨
+  λ α a, some a
+⟩ 
+
+
+
+end hidden
