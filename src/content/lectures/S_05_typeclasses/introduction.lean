@@ -15,7 +15,7 @@ ad hoc polymorphism
 information needed to implement an overloaded operator for
 a specified type of element
 - We see how Lean's support for typeclasss enables lookup
-and passing of typeclass *instances* as implicit arguments
+and passing of typec lass *instances* as implicit arguments
 - We then see how these ideas support the representation
 of abstract algebraic structures.
 - As an example, we formalize the abstract algebraic 
@@ -259,20 +259,35 @@ a correspond binary operation, identity element,
 and proof that it really is an identity element.
 -/
 
-class monoid (α : Type) :=
+class monoid' (α : Type) :=
 (op : α → α → α)
 (id : α)
 (pf : ∀ (a : α), op a id = a) 
 
+/-
+OOPS! Initial version, given just above, left out 
+the requirement that op be associative. We fix that
+in the following definition.
+-/
+
+class monoid (α : Type) :=
+(op : α → α → α)
+(assoc : ∀ a b c, op a (op b c) = op (op a b) c)
+(id : α)
+(pf : ∀ (a : α), op a id = a) 
+
+
 instance add_monoid : monoid nat :=
 monoid.mk 
   nat.add 
+  _       -- now need proof here; exercise
   0 
   nat.add_zero
 
 instance and_monoid : monoid bool := 
 monoid.mk 
   band 
+  _
   tt 
   begin 
     intros, cases a, repeat { apply rfl },  
@@ -281,6 +296,7 @@ monoid.mk
 instance append_monoid : monoid string := 
 monoid.mk 
   append 
+  _
   "" 
   begin 
     sorry
