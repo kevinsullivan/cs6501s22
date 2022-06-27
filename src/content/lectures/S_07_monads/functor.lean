@@ -1,8 +1,22 @@
 universes u v
 
+
+/-
+This unit is about the functor. A functor is a collection of objects 
+(such as lists or options over some type, α) with a function, map : 
+(α → β) → f α → f β, overloaded for each specified type constructors, 
+f, lifting the (α → β) function to an (f α → f β) function. Map lifts
+functions on elements to become functions on data structures that can
+contain such elements. It converts a data structure containing such α 
+values into an isomorphic data structure amy α valuesreplaced by the 
+β values obtained by applying the (α → β) function to each α value.+
+-/
+
+
 /-
 We define a simple "binary tree of α values" data type
-for use later in this file. Tuck it away in memory for now. 
+for use later in this file. Tuck it away in memory for 
+now. 
 -/
 
 inductive tree (α : Type u)
