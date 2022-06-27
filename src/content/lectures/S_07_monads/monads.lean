@@ -297,6 +297,8 @@ def is_messy_prof := (m_breed >=> m_coat >=> m_sheds)
 #reduce is_messy_prof fido
 #reduce is_messy_prof polly
 
+
+#reduce polly >>= (m_breed >=> m_coat >=> m_sheds)
 /-
 So the fish operator supports the feeding of 
 a monadic value into a composition of monadic
@@ -370,7 +372,7 @@ So why do monads matter? By supporting composition they
 enable decomposition, which is fundamental to problem
 solving. They also support a broad range of effectful
 styles of programming in otherwise purely functional
-styles of programming. Finally, they illustrate a very
+styles of programming. Third, they illustrate a very
 beautiful point: they implement composition not in the
 category of ordinary sets and functions, but in what are
 called Kleisli categories. Composition is the essential
@@ -381,6 +383,16 @@ puts you on a whole new path of discovery.
 
 end hidden
 
-/-
+#check list.map id = id
 
--/
+#check @funext
+
+universe u
+theorem list_map_ok_1 : ∀ (T : Type u), list.map (@id T) = (@id (list T)) := 
+begin
+  assume T,
+  apply funext,
+  sorry
+end
+
+#check @applicative

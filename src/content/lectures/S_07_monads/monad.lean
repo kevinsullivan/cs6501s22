@@ -585,6 +585,8 @@ instance : has_return' (option) :=
   λ α a, some a
 ⟩ 
 
-
-
 end hidden
+
+-- We can now recommend that you use Lean's monad definitions
+
+#check @monad

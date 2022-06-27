@@ -49,8 +49,9 @@ A function polymorphic in any α for which truish is defined that takes
 a value, a, of this type and returns a Boolean true or false (tt or ff)
 value, reflecting the truishness of a.
 -/
-open has_truish
-def is_truish { α : Type } [has_truish α] (a : α) : bool := truish a
+-- open has_truish
+
+def is_truish { α : Type } [has_truish α] (a : α) : bool := has_truish.truish a
 
 /-
 Examples of ad hoc polymorphism
@@ -58,9 +59,10 @@ Examples of ad hoc polymorphism
 #eval is_truish tt
 #eval is_truish ff
 #eval is_truish 0
-#eval is_truish 1
+#eval is_truish 18
 #eval is_truish ""
 #eval is_truish "Hello, Lean!"
+
 
 def if_truish_then_else { α β : Type } [has_truish α] (c : α) (t f : β) : β :=
 if is_truish c then t else f

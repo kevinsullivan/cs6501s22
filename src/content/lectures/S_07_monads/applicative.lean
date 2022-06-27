@@ -107,7 +107,14 @@ class applicative (f : Type u → Type v) extends functor f, has_pure f, has_seq
 (map       := λ _ _ x y, pure x <**> y)
 
 /-
-The "applicative option" instance implements failure propagation.
+Note that it *extends* the functor typeclass. Look for the use of
+its "map" function in the definition of the applicative functor's 
+"seq" functions, coming up next.
+-/
+
+/-
+The "applicative option" instance implements function application
+*with built-in failure propagation*.
 -/
 
 def pure_option {α : Type u} : α → option α 
