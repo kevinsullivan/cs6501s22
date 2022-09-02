@@ -18,7 +18,7 @@ def get_interp_values : bool_expr → list interp → list bool
 | e (h::t) := (eval e) h :: get_interp_values e t
 
 
--- Jack: returns list of interpretations for set of variables
+-- Returns list of interpretations for set of variables
 def interps_of_vars : cset bool_var → list interp
 | list.nil := [λ v, ff]
 | (h::t) := 

@@ -1,0 +1,90 @@
+
+
+/- ======================= -/
+
+/-
+A step toward a solution is to suggest 
+-/
+
+-- polly >> breed   
+#reduce   
+  (λ d, breed d)         -- bind d and apply breed to it
+    polly                -- argument to be bound
+
+
+-- polly >> breed >> coat
+#reduce 
+  (λ b, coat b)     -- function
+    ((λ d, breed d) -- argument (rest)
+      polly
+    )
+
+-- polly >> breed >> coat >> sheds
+#reduce 
+  (λ c, sheds c)  -- function
+    ((λ b, coat b) -- argument (rest)
+      ((λ d, breed d)
+          polly
+      )
+  )
+
+
+
+
+/-
+The return types of the functions we're componing, namely
+(coats × ℕ), (breeds × ℕ), and (yesno × ℕ). share a common
+form, namely (α × ℕ) for various types, α (in our example,
+breeds, coats, and yesno). Let's define a parameterized 
+type to capture this commonality.
+-/
+
+def prof_res (α : Type) := α × ℕ 
+def init_res {α : Type} (a : α): prof_res α := (a, 0)
+
+/-
+Now imagine a function application notation where you 
+write a profiled result on the left the function to be
+applied on the right. Think of it as feeding an argument
+value into a function to be operated upon. Let's use a
+notation to represent this idea, with v >> f meaning
+f v. 
+-/
+
+/- ======== -/
+
+/-
+But suppose that in addition to just returning a 
+new string, we also want this function to tell us
+how many characters were in a string that it has
+processed. Now instead of returning just a string
+we'll have to return some kind of data structure
+that contains the right string but also a natural
+number expressing the length of the string.
+-/
+
+def m_excl : string → string × nat := 
+  λ s, (s ++ "!", s.length)
+
+#eval m_excl "Hello"
+
+
+
+/-
+Consider the type of messy and messy'
+-/
+
+#check 
+
+namespace hidden
+
+universes u v
+
+class monad' (m : Type u → Type v) extends applicative m, has_bind m : Type (max (u+1) v) :=
+(map := λ α β f x, x >>= pure ∘ f)
+(seq := λ α β f x, f >>= (<$> x))
+
+end hidden
+
+
+#check @monad
